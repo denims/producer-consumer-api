@@ -48,4 +48,13 @@ public class TopicServiceImpl implements TopicService {
         log.info("Deleting topic " + topicName);
         topicRepository.deleteByTopicName(topicName);
     }
+
+    @Override
+    public Topic getTopicByName(String topic) throws TopicNotFoundException {
+        Topic savedTopic = topicRepository.findByTopicName(topic);
+        if (topic == null) {
+            throw new TopicNotFoundException();
+        }
+        return savedTopic;
+    }
 }

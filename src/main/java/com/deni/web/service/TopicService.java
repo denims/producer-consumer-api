@@ -10,4 +10,6 @@ public interface TopicService {
     Topic editTopic(String oldName, String newName) throws TopicNotFoundException;
 
     void deleteTopic(String topicName);
+
+    Topic getTopicByName(String topic) throws TopicNotFoundException;
 }
