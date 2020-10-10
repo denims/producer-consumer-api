@@ -1,10 +1,15 @@
 pipeline {
-    agent { dockerfile true }
-    stages {
-        stage('Build dockerfile') {
-            steps {
-                sh 'echo Docker image built'
-            }
+  environment {
+    registry = "denimallel/prod-cons-api"
+  }
+  agent any
+  stages {
+    stage('Build dockerfile') {
+      steps {
+        script {
+          docker.build registry + ":latest"
         }
+      }
     }
+  }
 }
