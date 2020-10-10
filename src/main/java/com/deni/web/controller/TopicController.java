@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/topic")
+@CrossOrigin
 public class TopicController {
     private final TopicService topicService;
     private final SubscriptionService subscriptionService;
@@ -28,7 +29,8 @@ public class TopicController {
 
     @PutMapping("{topicName}/edit")
     public ResponseEntity<Topic> editTopics(@RequestBody String newTopicName,
-                                            @PathVariable String topicName) throws TopicNotFoundException {
+                                            @PathVariable String topicName)
+            throws TopicNotFoundException, TopicAlreadyExistsException {
         return ResponseEntity.ok(topicService.editTopic(topicName, newTopicName));
     }
 

@@ -32,11 +32,16 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public Topic editTopic(String oldName, String newName) throws TopicNotFoundException {
+    public Topic editTopic(String oldName, String newName)
+            throws TopicNotFoundException, TopicAlreadyExistsException {
         log.info("Updating topic names");
         Topic topic = topicRepository.findByTopicName(oldName);
         if (topic == null) {
             throw new TopicNotFoundException();
+        }
+        Topic existingTopic = topicRepository.findByTopicName(newName);
+        if (existingTopic != null) {
+            throw new TopicAlreadyExistsException();
         }
         topic.setTopicName(newName);
         return topicRepository.save(topic);
