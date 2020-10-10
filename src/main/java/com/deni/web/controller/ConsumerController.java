@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/consumer")
+@CrossOrigin
 public class ConsumerController {
 
     private final MessageService messageService;

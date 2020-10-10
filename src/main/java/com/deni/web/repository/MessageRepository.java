@@ -10,4 +10,6 @@ public interface MessageRepository extends CrudRepository<Message, Long> {
     List<Message> findAllByTopic(Topic topic);
 
     List<Message> findAllByTopicAndMessageIdAfter(Topic topic, Long messageId);
+
+    void deleteAllByTopicTopicName(String topicName);
 }

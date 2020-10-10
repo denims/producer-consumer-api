@@ -3,6 +3,8 @@ package com.deni.web.service;
 import com.deni.web.exception.TopicAlreadyExistsException;
 import com.deni.web.exception.TopicNotFoundException;
 import com.deni.web.model.Topic;
+import com.deni.web.repository.MessageRepository;
+import com.deni.web.repository.SubscriptionRepository;
 import com.deni.web.repository.TopicRepository;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
@@ -13,9 +15,15 @@ import javax.transaction.Transactional;
 @Log
 public class TopicServiceImpl implements TopicService {
     private final TopicRepository topicRepository;
+    private final SubscriptionRepository subscriptionRepository;
+    private final MessageRepository messageRepository;
 
-    public TopicServiceImpl(TopicRepository topicRepository) {
+    public TopicServiceImpl(TopicRepository topicRepository,
+                            SubscriptionRepository subscriptionRepository,
+                            MessageRepository messageRepository) {
         this.topicRepository = topicRepository;
+        this.subscriptionRepository = subscriptionRepository;
+        this.messageRepository = messageRepository;
     }
 
     @Override
@@ -51,13 +59,15 @@ public class TopicServiceImpl implements TopicService {
     @Transactional
     public void deleteTopic(String topicName) {
         log.info("Deleting topic " + topicName);
+        subscriptionRepository.deleteAllByTopicTopicName(topicName);
+        messageRepository.deleteAllByTopicTopicName(topicName);
         topicRepository.deleteByTopicName(topicName);
     }
 
     @Override
     public Topic getTopicByName(String topic) throws TopicNotFoundException {
         Topic savedTopic = topicRepository.findByTopicName(topic);
-        if (topic == null) {
+        if (savedTopic == null) {
             throw new TopicNotFoundException();
         }
         return savedTopic;

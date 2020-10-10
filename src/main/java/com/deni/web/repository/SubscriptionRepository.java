@@ -7,4 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface SubscriptionRepository extends CrudRepository<Subscription, Long> {
     Subscription findByTopicAndConsumer(Topic topic, Consumer consumer);
+
+    void deleteAllByTopicTopicName(String topic);
 }
