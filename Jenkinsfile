@@ -9,7 +9,7 @@ pipeline {
         stage('Build dockerfile') {
             steps {
                 script {
-                    dockerImage = docker.build registry + ":latest"
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER"
                 }
             }
         }
@@ -20,6 +20,12 @@ pipeline {
                         dockerImage.push()
                     }
                 }
+            }
+        }
+        stage('Trigger Deploy') {
+            steps {
+                echo "Triggering API deploy"
+                build job: 'prod-consumer-backend-deploy', parameters: [string(name: 'DOCKER_IMAGE', value: registryCredential)]
             }
         }
     }
