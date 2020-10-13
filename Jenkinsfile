@@ -6,11 +6,15 @@ pipeline {
     }
     agent any
     stages {
+        stage('Build the application') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
         stage('Build dockerfile') {
             steps {
                 script {
                     dockerImage = docker.build registry + ":$BUILD_NUMBER"
-                    println dockerImage
                 }
             }
         }
@@ -26,7 +30,7 @@ pipeline {
         stage('Trigger Deploy') {
             steps {
                 echo "Triggering API deploy"
-                build job: 'prod-consumer-backend-deploy', parameters: [string(name: 'DOCKER_IMAGE', value: registryCredential)]
+                build job: 'prod-consumer-backend-deploy', parameters: {string(name: 'DOCKER_IMAGE_VERSION', value: $BUILD_NUMBER)}
             }
         }
     }
