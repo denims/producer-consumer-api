@@ -30,7 +30,7 @@ pipeline {
         stage('Trigger Deploy') {
             steps {
                 echo "Triggering API deploy"
-                build job: 'prod-consumer-backend-deploy', parameters: {string(name: 'DOCKER_IMAGE_VERSION', value: $BUILD_NUMBER)}
+                build job: 'prod-consumer-backend-deploy/master', parameters: [string(name: 'DOCKER_IMAGE_VERSION', value: "$BUILD_NUMBER")]
             }
         }
     }
